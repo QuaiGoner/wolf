@@ -14,6 +14,7 @@ RUN apt-get update -y && \
     git \
     clang \
     libboost-thread-dev libboost-locale-dev libboost-filesystem-dev libboost-log-dev libboost-stacktrace-dev \
+    icu-devtools \
     libssl-dev \
     libevdev-dev \
     libunwind-dev \
