@@ -71,6 +71,31 @@ RUN apt-get update -y && \
     libglvnd0 libgl1 libglx0 libegl1 libgles2 xwayland \
     && rm -rf /var/lib/apt/lists/*
 
+## Deploy pulse server
+# Configure container to run process as root user
+# Note: 
+#   The PulseAudio daemon will refuse to start if the $HOME directory is not
+#   owned by the user who launched it, _EVEN IF THAT USER IS root_.  So we need
+#   to override $HOME to _not_ be /home/retro.  This isn't a big deal because
+#   this dir is entirely inside the container anyway (it's not mounted into
+#   $local_state) so its name is essentially irrelevant.
+ENV \
+    UNAME="root" \
+    HOME="/root"
+
+RUN apt-get update -y && \
+    apt-get install -y --no-install-recommends \
+    alsa-utils \
+    libasound2 \
+    libasound2-plugins \
+    pulseaudio \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY docker/configs/default.pa /etc/pulse/default.pa
+COPY docker/configs/client.conf /etc/pulse/client.conf
+COPY docker/configs/daemon.conf /etc/pulse/daemon.conf
+COPY --chmod=777 docker/scripts/run-pulse.sh /opt/gow/run-pulse.sh
+
 ENV GST_PLUGIN_PATH=/usr/local/lib/x86_64-linux-gnu/gstreamer-1.0/
 COPY --from=wolf-builder /wolf/wolf /wolf/wolf
 
