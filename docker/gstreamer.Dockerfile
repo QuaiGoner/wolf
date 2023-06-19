@@ -9,7 +9,7 @@ ENV GSTREAMER_VERSION=$GSTREAMER_VERSION
 
 ENV SOURCE_PATH=/sources/
 WORKDIR $SOURCE_PATH
-COPY --chmod=777 docker/gstreamer.control $SOURCE_PATH/gstreamer.control
+COPY --chmod=777 gstreamer.control $SOURCE_PATH/gstreamer.control
 
 RUN <<_GSTREAMER_INSTALL
     #!/bin/bash
@@ -72,6 +72,10 @@ RUN <<_GSTREAMER_INSTALL
     $SOURCE_PATH \
     /var/lib/apt/lists/*
 _GSTREAMER_INSTALL
+
+LABEL org.opencontainers.image.source="https://github.com/games-on-whales/wolf/"
+LABEL org.opencontainers.image.description="GStreamer: https://gstreamer.freedesktop.org/"
+
 
 ENTRYPOINT ["/bin/bash"]
 CMD ["/usr/local/bin/gst-inspect-1.0"]
