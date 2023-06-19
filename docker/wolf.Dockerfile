@@ -90,11 +90,10 @@ RUN apt-get update -y && \
     libasound2-plugins \
     pulseaudio \
     && rm -rf /var/lib/apt/lists/*
-
+	
 COPY docker/configs/default.pa /etc/pulse/default.pa
 COPY docker/configs/client.conf /etc/pulse/client.conf
 COPY docker/configs/daemon.conf /etc/pulse/daemon.conf
-COPY --chmod=777 docker/scripts/run-pulse.sh /opt/gow/run-pulse.sh
 
 ENV GST_PLUGIN_PATH=/usr/local/lib/x86_64-linux-gnu/gstreamer-1.0/
 COPY --from=wolf-builder /wolf/wolf /wolf/wolf
